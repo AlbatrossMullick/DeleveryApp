@@ -23,7 +23,9 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +44,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -73,12 +79,16 @@ public class LoginActivity extends Activity {
     private View mLoginFormView;
     private CheckBox showPassword;
     private GoogleSignInClient mGoogleSignInClient;
+    private Switch userSwitch;
+    private String userType;
+   private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mycontext = getApplicationContext();
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.username);
         googleSignIn=(SignInButton)findViewById(R.id.google_sign_in_button);
@@ -86,6 +96,24 @@ public class LoginActivity extends Activity {
         mPasswordView = (EditText) findViewById(R.id.txtpassword);
         showPassword = (CheckBox)findViewById(R.id.showcheckBox);
          mEmailSignInButton = (CardView) findViewById(R.id.loginButton);
+         userSwitch=(Switch)findViewById(R.id.switch1);
+        if(userSwitch.isChecked()) {
+            userType="MED";
+        }else{
+            userType="DEL";
+        }
+         userSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+             @Override
+             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                 if(isChecked){
+                    userSwitch.setText("Medical Shop");
+                     userType="MED";
+                 }else{
+                     userSwitch.setText("Delevery Boy");
+                     userType="DEL";
+                 }
+             }
+         });
 // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -257,8 +285,7 @@ public class LoginActivity extends Activity {
                             } else {
                                 // If sign in fails, display a message to the user.
                                 //  Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+
                                 updateUI(null);
                             }
                             showProgress(false);
@@ -323,14 +350,24 @@ public class LoginActivity extends Activity {
 
         private void updateUI(FirebaseUser user){
         if(user!=null){
+            
             User.setUserName(user.getDisplayName());
             User.setEmail(user.getEmail());
+            User.setUserType(userType);
+            User.setUid(user.getUid());
+
+
+
             Toast.makeText(mycontext, "welcome "+user.getDisplayName(),
                     Toast.LENGTH_SHORT).show();
             Intent mIntent = new Intent(mycontext,HomeActivity.class);
             finishAffinity();
             startActivity(mIntent);
 
+        }
+        else{
+            Toast.makeText(mycontext, "login Failed",
+                    Toast.LENGTH_SHORT).show();
         }
 
 
