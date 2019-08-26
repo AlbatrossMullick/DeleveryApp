@@ -124,7 +124,7 @@
                 android:text="Show Password" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/forgetPssword"
                 android:layout_width="147dp"
                 android:layout_height="27dp"
 

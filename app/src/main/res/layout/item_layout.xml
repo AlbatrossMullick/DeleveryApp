@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/homeorder"
+    >
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="82dp"
+        android:layout_marginTop="24dp"
+        android:text="Order ID :"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="91dp"
+        android:layout_marginTop="3dp"
+        android:text="From :" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView4"
+        android:layout_alignStart="@+id/textView4"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="4dp"
+        android:text="To :" />
+
+    <TextView
+        android:id="@+id/home_ordernumber"
+        android:layout_width="111dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView3"
+        android:layout_marginStart="0dp"
+
+
+        android:layout_toEndOf="@+id/textView3"
+        android:text="1234456789" />
+
+    <TextView
+        android:id="@+id/home_fromOrderAddress"
+        android:layout_width="match_parent"
+        android:layout_height="19dp"
+        android:layout_alignTop="@+id/textView4"
+        android:layout_marginStart="7dp"
+
+        android:layout_toEndOf="@+id/textView4"
+        android:text="Bano HOtel, Bus stand Rourkerla b new yback ant thing else" />
+
+    <TextView
+        android:id="@+id/home_toOrderAddress"
+        android:layout_width="match_parent"
+        android:layout_height="19dp"
+        android:layout_alignLeft="@+id/textView5"
+        android:layout_alignTop="@+id/textView5"
+        android:layout_marginStart="38dp"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/textView5"
+        android:text="padmanava college of engineering Rourkela" />
+
+    <ImageView
+        android:id="@+id/home_orderIcon"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:visibility="visible"
+        android:layout_alignTop="@+id/home_ordernumber"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="-4dp"
+       android:src="@drawable/medlife" />
+
+    <ProgressBar
+        android:id="@+id/pBar"
+        style="?android:attr/progressBarStyleLarge"
+
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignStart="@+id/home_orderIcon"
+        android:layout_alignTop="@+id/home_orderIcon"
+        android:layout_alignEnd="@+id/home_orderIcon"
+        android:layout_alignBottom="@+id/home_orderIcon"
+
+        android:visibility="gone" />
+
+
+    <TextView
+        android:id="@+id/home_orderStatus"
+        android:layout_width="105dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/home_ordernumber"
+        android:layout_marginStart="25dp"
+
+        android:layout_toEndOf="@+id/home_ordernumber"
+        android:text="Active" />
+</RelativeLayout>

@@ -44,7 +44,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -81,7 +85,9 @@ public class LoginActivity extends Activity {
     private GoogleSignInClient mGoogleSignInClient;
     private Switch userSwitch;
     private String userType;
+    private TextView forgetPassword;
    private FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +98,7 @@ public class LoginActivity extends Activity {
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.username);
         googleSignIn=(SignInButton)findViewById(R.id.google_sign_in_button);
-
+        forgetPassword = (TextView) findViewById(R.id.forgetPssword);
         mPasswordView = (EditText) findViewById(R.id.txtpassword);
         showPassword = (CheckBox)findViewById(R.id.showcheckBox);
          mEmailSignInButton = (CardView) findViewById(R.id.loginButton);
@@ -114,7 +120,14 @@ public class LoginActivity extends Activity {
                  }
              }
          });
-// Configure Google Sign In
+
+        forgetPassword.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getApplicationContext(),ForgotPassword.class);
+                startActivity(intent);
+            }
+        });
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -126,6 +139,7 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View v) {
                 signIn();
+
 
             }
         });
@@ -154,6 +168,7 @@ public class LoginActivity extends Activity {
                     // TODO: handle exception
                 }
                 attemptLogin();
+
             }
         });
 
@@ -216,7 +231,7 @@ public class LoginActivity extends Activity {
                             updateUI(null);
 
                         }
-                        showProgress(false);
+
 
                         // ...
                     }
@@ -279,13 +294,14 @@ public class LoginActivity extends Activity {
 
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
-                                Toast.makeText(getApplicationContext(), "welcome "+user.getDisplayName(),
-                                        Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getApplicationContext(), "welcome "+user.getDisplayName(),
+//                                        Toast.LENGTH_SHORT).show();
 
                             } else {
                                 // If sign in fails, display a message to the user.
                                 //  Log.w(TAG, "signInWithEmail:failure", task.getException());
-
+                                Toast.makeText(mycontext, "login Failed",
+                                        Toast.LENGTH_SHORT).show();
                                 updateUI(null);
                             }
                             showProgress(false);
@@ -348,30 +364,64 @@ public class LoginActivity extends Activity {
      * the user.
      */
 
-        private void updateUI(FirebaseUser user){
+        private void updateUI(final FirebaseUser user){
         if(user!=null){
-            
-            User.setUserName(user.getDisplayName());
-            User.setEmail(user.getEmail());
-            User.setUserType(userType);
-            User.setUid(user.getUid());
 
 
 
-            Toast.makeText(mycontext, "welcome "+user.getDisplayName(),
-                    Toast.LENGTH_SHORT).show();
-            Intent mIntent = new Intent(mycontext,HomeActivity.class);
-            finishAffinity();
-            startActivity(mIntent);
+            final DocumentReference docRef = db.collection("users").document(user.getUid());
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+
+                            Map<String, Object> userdata=document.getData();
+
+                            if(userType.equals(userdata.get("userType").toString())){
+                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                User.setUserName(userdata.get("userName").toString());
+                                User.setUserType(userdata.get("userType").toString());
+                                User.setEmail(userdata.get("email").toString());
+
+                                User.setUid(userdata.get("uid").toString());
+                                User.setToken(user.getIdToken(true).toString());
+
+                                Toast.makeText(mycontext, "welcome "+User.getUserName(),
+                                        Toast.LENGTH_SHORT).show();
+                                Intent mIntent = new Intent(mycontext,HomeActivity.class);
+                                finishAffinity();
+                                startActivity(mIntent);
+                            }else{
+                                FirebaseAuth.getInstance().signOut();
+                                Toast.makeText(mycontext, "Register yourself first",Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            FirebaseAuth.getInstance().signOut();
+                            Toast.makeText(mycontext, "Register yourself first",Toast.LENGTH_SHORT).show();
+
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                    showProgress(false);
+                }
+            });
+
+
+
+
 
         }
         else{
-            Toast.makeText(mycontext, "login Failed",
-                    Toast.LENGTH_SHORT).show();
+            showProgress(false);
         }
 
 
     }
+
 
 }
 

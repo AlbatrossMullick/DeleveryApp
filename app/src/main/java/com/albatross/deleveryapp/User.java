@@ -5,6 +5,15 @@ public class User {
     private static String email;
     private static String uid;
     private static String userType;
+    private static String Token;
+
+    public static String getToken() {
+        return Token;
+    }
+
+    public static void setToken(String token) {
+        Token = token;
+    }
 
     public static String getUid() {
         return uid;
