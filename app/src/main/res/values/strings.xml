@@ -12,4 +12,10 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="forget_password">Forgot Password?</string>
+    <string name="title_activity_welcome">Welcome</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_forget_password">ForgetPassword</string>
+    <string name="passwordreset">Password Reset</string>
 </resources>
