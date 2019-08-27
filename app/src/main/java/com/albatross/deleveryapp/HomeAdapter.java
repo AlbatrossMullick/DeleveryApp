@@ -67,7 +67,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         }
         private void setData(final String orderno,String orderico, String orderto,String orderfrom,String status){
             orderid.setText(orderno);
+            if(status.equals("new")){
+                orderStatus.setBackgroundColor(itemView.getResources().getColor(R.color.green));
+            }else{
 
+            }
             Glide
                     .with(itemView)
                     .load(orderico)

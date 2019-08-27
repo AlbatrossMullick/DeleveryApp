@@ -33,10 +33,10 @@ public class HomeActivity extends Activity {
         recyclerView.setLayoutManager(layoutManager);
         List<ModelClass> modelClassList = new ArrayList<>();
         String img = "https://assets3.thrillist.com/v1/image/2797371/size/tmg-article_default_mobile.jpg";
+        modelClassList.add(new ModelClass("123",img,"ggj","rkl","new"));
+        modelClassList.add(new ModelClass("12",img,"ggj","rkl","success"));
         modelClassList.add(new ModelClass("123",img,"ggj","rkl","success"));
-        modelClassList.add(new ModelClass("123",img,"ggj","rkl","success"));
-        modelClassList.add(new ModelClass("123",img,"ggj","rkl","success"));
-        modelClassList.add(new ModelClass("123",img,"ggj","rkl","success"));
+        modelClassList.add(new ModelClass("123",img,"ggj","rkl","new"));
         modelClassList.add(new ModelClass("123","https://yt3.ggpht.com/a/AGF-l7-9Xg5EGp1KDDIleuQqHTVxmnl6as7H47YH2A=s48-c-k-c0xffffffff-no-rj-mo","ggj","rkl","success"));
 
         HomeAdapter adapter = new HomeAdapter(modelClassList);

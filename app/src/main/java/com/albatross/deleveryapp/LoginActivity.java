@@ -37,6 +37,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
@@ -87,6 +89,8 @@ public class LoginActivity extends Activity {
     private String userType;
     private TextView forgetPassword;
    private FirebaseFirestore db;
+   private final String MEDICAL="MED";
+   private final String DELEVERY="DEL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,9 +108,9 @@ public class LoginActivity extends Activity {
          mEmailSignInButton = (CardView) findViewById(R.id.loginButton);
          userSwitch=(Switch)findViewById(R.id.switch1);
         if(userSwitch.isChecked()) {
-            userType="MED";
+            userType=MEDICAL;
         }else{
-            userType="DEL";
+            userType=DELEVERY;
         }
          userSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
              @Override
@@ -367,9 +371,20 @@ public class LoginActivity extends Activity {
         private void updateUI(final FirebaseUser user){
         if(user!=null){
 
+                String colection;
+                switch (userType){
+                    case MEDICAL :
+                        colection = "MedicalUser";
+                        break;
+                    case DELEVERY:
+                        colection = "DeleveryUser";
+                        break;
+                    default:
+                        colection = null;
+                }
 
 
-            final DocumentReference docRef = db.collection("users").document(user.getUid());
+            final DocumentReference docRef = db.collection(colection).document(user.getUid());
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
